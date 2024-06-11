@@ -9,6 +9,11 @@
     "noImplicitReturns": true,
     "noFallthroughCasesInSwitch": true,
     "skipLibCheck": true,
+    "paths": {
+      "ngx-chilean-ppu": [
+        "./dist/ngx-chilean-ppu"
+      ]
+    },
     "esModuleInterop": true,
     "sourceMap": true,
     "declaration": false,
