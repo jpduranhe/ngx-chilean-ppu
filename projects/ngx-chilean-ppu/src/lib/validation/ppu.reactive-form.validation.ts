@@ -1,10 +1,21 @@
 import {inject} from "@angular/core";
-import {AbstractControl, AbstractControl, ValidatorFn} from "@angular/forms";
+import {AbstractControl, ValidatorFn} from "@angular/forms";
 import { NgxChileanPpuService } from "../service/ngx-chilean-ppu.service";
 
-export function ppuValid(): ValidatorFn {
-  const ppuService = inject(NgxChileanPpuService); ;
-  return (control: AbstractControl): { [key: string]: any } | null => {
-    return ppuService.validatePpu(control.value) ? null : { ppuInvalid: true };
+
+export class PpuValidation {
+  private ppuService: NgxChileanPpuService;
+  constructor() {
+    this.ppuService = new NgxChileanPpuService();
+  }
+
+  public ppuValid = (): ValidatorFn => {
+    return (control: AbstractControl): { [key: string]: any } | null => {
+      return this.ppuService.validatePpu(control.value)
+        ? null
+        : { ppuInvalid: true };
+    };
   };
 }
+
+

@@ -8,6 +8,7 @@ import { letterDB } from './letterDB';
 export class NgxChileanPpuService {
   ppuFormat: PpuFormat;
   constructor() {
+    console.log('NgxChileanPpuService built!');
     this.ppuFormat = new PpuFormat();
   }
 
@@ -116,18 +117,18 @@ export class NgxChileanPpuService {
     return regexCarroArrastre.test(ppu);
   }
   public validatePpu(ppu: string) {
-     try{
+    try {
       this.verifyPpuType(ppu);
       return true;
-     } catch (error){
+    } catch (error) {
       return false;
-     }
+    }
   }
 
   public calculateDv(ppu: string) {
     // Identificar algoritmo por formato de ppu.
     let format = this.verifyPpuType(ppu)?.type!;
-    const numbers= this.transformInPreNumber(ppu);
+    const numbers = this.transformInPreNumber(ppu);
     if (format === 'LL.NNNN') {
       let S =
         numbers[6] * 2 +
