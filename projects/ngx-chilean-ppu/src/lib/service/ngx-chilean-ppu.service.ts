@@ -8,7 +8,6 @@ import { letterDB } from './letterDB';
 export class NgxChileanPpuService {
   ppuFormat: PpuFormat;
   constructor() {
-    console.log('NgxChileanPpuService built!');
     this.ppuFormat = new PpuFormat();
   }
 
@@ -40,7 +39,9 @@ export class NgxChileanPpuService {
     return number;
   }
   private verifyPpuType(ppu: string) {
-    if (ppu.length !== this.ppuFormat.MAX_LENGTH) {
+    localStorage.setItem('ppu length', ppu.length.toString());
+    localStorage.setItem('ppu length', this.ppuFormat.MAX_LENGTH.toString());
+    if (ppu.length > this.ppuFormat.MAX_LENGTH) {
       console.error('La patente(ppu) ingresada es de largo inválido');
       return null;
     }
@@ -118,8 +119,8 @@ export class NgxChileanPpuService {
   }
   public validatePpu(ppu: string) {
     try {
-      this.verifyPpuType(ppu);
-      return true;
+      return (this.verifyPpuType(ppu));
+
     } catch (error) {
       return false;
     }

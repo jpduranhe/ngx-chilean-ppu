@@ -11,9 +11,9 @@ export class PpuValidation {
 
   public ppuValid = (): ValidatorFn => {
     return (control: AbstractControl): { [key: string]: any } | null => {
-      return this.ppuService.validatePpu(control.value)
-        ? null
-        : { ppuInvalid: true };
+      return (this.ppuService.validatePpu(control.value)==null)
+        ? { ppuInvalid: true }
+        : null;
     };
   };
 }

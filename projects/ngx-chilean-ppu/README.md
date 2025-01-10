@@ -1,24 +1,92 @@
-# NgxChileanPpu
+# NgxChileanPPU
 
-This library was generated with [Angular CLI](https://github.com/angular/angular-cli) version 18.0.0.
+Esta librería permite validar en ReactiveForm y formatear Placas Patente chilenos en Angular.
 
-## Code scaffolding
 
-Run `ng generate component component-name --project ngx-chilean-ppu` to generate a new component. You can also use `ng generate directive|pipe|service|class|guard|interface|enum|module --project ngx-chilean-ppu`.
-> Note: Don't forget to add `--project ngx-chilean-ppu` or else it will be added to the default project in your `angular.json` file. 
 
-## Build
+##Instalacion
 
-Run `ng build ngx-chilean-ppu` to build the project. The build artifacts will be stored in the `dist/` directory.
+```typescript
+    npm i ngx-chilean-ppu
+```
 
-## Publishing
+## Uso
+Agregar en app.config.ts
+```typescript
+  export const appConfig: ApplicationConfig = {
+  providers: [
+    ..
+    providePpu()
+  ]
+};
+```
+```typescript
+import { Component } from '@angular/core';
+import { Component } from '@angular/core';
+import {
+  FormBuilder,
+  FormGroup,
+  FormsModule,
+  ReactiveFormsModule,
+  Validators,
+} from '@angular/forms';
+import 'zone.js';
 
-After building your library with `ng build ngx-chilean-ppu`, go to the dist folder `cd dist/ngx-chilean-ppu` and run `npm publish`.
+import { Rut, RutDirective, RutPipe } from 'ngx-chilean-rut';
 
-## Running unit tests
+  @Component({
+    selector: 'app-root',
+    imports: [
+      FormsModule,
+      ReactiveFormsModule
+    ],
+      template: `
+      <div class="container">
+        <div class="row">
+        <h1>PPU Tester</h1>
+          <div class="col-md-12">
+            <form [formGroup]="formulario" class="form-horizontal">
+              <input class="form-control" formControlName="ppu" name="ppu" type="text" placeholder="" />
+            </form>
 
-Run `ng test ngx-chilean-ppu` to execute the unit tests via [Karma](https://karma-runner.github.io).
+            @if(formulario.get('ppu')!.invalid){
+                @if(formulario.get('ppu')!.errors?.['required']){
+                  <p style="color: #ff0000;">
+                  <span>El campo es requerido</span>
+                  </p>
+                }
+                @if(formulario.get('ppu')!.errors?.['ppuInvalid']){
+                  <p style="color: #ff0000;">
+                  <span >El placa patente no es válida</span>
+                  </p>
+                }
+            }
 
-## Further help
+            </div>
+            <div class="col-md-12">
+              @if(formulario.get('ppu')!.valid){
+                <p> PPU: {{ formulario.get('ppu')!.value }}</p>
+                <p> DV ppu: {{ ppuService.calculateDv(formulario.get('ppu')!.value ) }}</p>
+              }
 
-To get more help on the Angular CLI use `ng help` or go check out the [Angular CLI Overview and Command Reference](https://angular.dev/tools/cli) page.
+            </div>
+        </div>
+
+      </div>
+      `
+    })
+    export class AppComponent {
+      public formulario: FormGroup;
+      public ppu = 'XL1187';
+      public ppuService = inject(NgxChileanPpuService);
+      public ppuValidation = inject(PpuValidation);
+      constructor(private formBuilder: FormBuilder) {
+        this.formulario = this.formBuilder.group({
+          ppu: ['', [Validators.required, this.ppuValidation.ppuValid()]],
+        });
+      }
+    }
+```
+
+
+Ejemplo de uso [Link](https://stackblitz.com/~/github.com/jpduranhe/example-ngx-chilean-ppu)
